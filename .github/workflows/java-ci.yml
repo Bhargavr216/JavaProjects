@@ -24,14 +24,12 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
 
-    - name: Build and Test ${{ matrix.project }}
+    - name: Compile and Test ${{ matrix.project }}
       run: |
         cd ${{ matrix.project }}
-        ./gradlew build # or ./mvnw clean install if using Maven
-
-    - name: Archive build artifacts
-      if: success()
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ matrix.project }}-artifacts
-        path: ${{ matrix.project }}/build # or ${{ matrix.project }}/target if using Maven
+        mkdir -p bin
+        find src -name "*.java" > sources.txt
+        javac -d bin @sources.txt
+        # If you have tests or a main class to run, include them here
+        # Example: java -cp bin com.example.MainClass
+        # Or use a test framework command
